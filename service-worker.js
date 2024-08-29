@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ghibli-cache-v1';
+const CACHE_NAME = 'tarefa-facil-v1';
 const urlsToCache = [
   '/',
   '/index.html',
