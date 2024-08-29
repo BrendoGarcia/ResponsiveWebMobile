@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Tarefas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Controle de Tarefas</h1>
+    </header>
+
+    <main>
+        <section id="task-form">
+            <h2>Adicionar Nova Tarefa</h2>
+            <form id="new-task-form">
+                <input type="text" id="task-title" placeholder="Título da Tarefa" required>
+                <textarea id="task-desc" placeholder="Descrição da Tarefa"></textarea>
+                <input type="date" id="task-date" required>
+                <button type="submit">Adicionar Tarefa</button>
+            </form>
+        </section>
+
+        <section id="task-list">
+            <h2>Tarefas</h2>
+            <ul id="tasks">
+                <!-- Tarefas serão listadas aqui -->
+            </ul>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
