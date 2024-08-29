@@ -1,9 +1,9 @@
 document.getElementById('new-task-form').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const taskTitle = document.getElementById('task-title').value;
-    const taskDesc = document.getElementById('task-desc').value;
-    const taskDate = document.getElementById('task-date').value;
+    const taskTitle = document.getElementById('task-title').value.trim();
+    const taskDesc = document.getElementById('task-desc').value.trim();
+    const taskDate = document.getElementById('task-date').value.trim();
 
     if (taskTitle && taskDate) {
         addTask(taskTitle, taskDesc, taskDate, true); // O último argumento indica se deve salvar no localStorage
@@ -14,21 +14,29 @@ document.getElementById('new-task-form').addEventListener('submit', function(eve
 
 function addTask(title, desc, date, save = false) {
     const taskList = document.getElementById('tasks');
-    const taskItem = document.createElement('li');
+    
+    // Verifique se a tarefa já existe no DOM
+    const existingTask = Array.from(taskList.children).find(
+        task => task.querySelector('h3').textContent === title && task.querySelector('small').textContent.includes(date)
+    );
 
-    taskItem.innerHTML = `
-        <div>
-            <h3>${title}</h3>
-            <p>${desc}</p>
-            <small>Data: ${date}</small>
-        </div>
-        <button onclick="toggleComplete(this)">✔️</button>
-    `;
+    if (!existingTask) {
+        const taskItem = document.createElement('li');
 
-    taskList.appendChild(taskItem);
+        taskItem.innerHTML = `
+            <div>
+                <h3>${title}</h3>
+                <p>${desc}</p>
+                <small>Data: ${date}</small>
+            </div>
+            <button onclick="toggleComplete(this)">✔️</button>
+        `;
 
-    if (save) {
-        saveTaskToLocalStorage(title, desc, date);
+        taskList.appendChild(taskItem);
+
+        if (save) {
+            saveTaskToLocalStorage(title, desc, date);
+        }
     }
 }
 
@@ -41,7 +49,7 @@ function saveTaskToLocalStorage(title, desc, date) {
     let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
     // Evitar duplicação verificando se a tarefa já existe
-    if (!tasks.some(task => task.title === title && task.date === date)) {
+    if (!tasks.some(task => task.title === title && task.desc === desc && task.date === date)) {
         tasks.push({ title, desc, date });
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }
