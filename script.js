@@ -1,5 +1,3 @@
-// scripts.js
-
 document.getElementById('new-task-form').addEventListener('submit', function(event) {
     event.preventDefault();
 
@@ -8,13 +6,13 @@ document.getElementById('new-task-form').addEventListener('submit', function(eve
     const taskDate = document.getElementById('task-date').value;
 
     if (taskTitle && taskDate) {
-        addTask(taskTitle, taskDesc, taskDate);
+        addTask(taskTitle, taskDesc, taskDate, true); // O último argumento indica se deve salvar no localStorage
     }
 
     this.reset();
 });
 
-function addTask(title, desc, date) {
+function addTask(title, desc, date, save = false) {
     const taskList = document.getElementById('tasks');
     const taskItem = document.createElement('li');
 
@@ -28,7 +26,10 @@ function addTask(title, desc, date) {
     `;
 
     taskList.appendChild(taskItem);
-    saveTaskToLocalStorage(title, desc, date);
+
+    if (save) {
+        saveTaskToLocalStorage(title, desc, date);
+    }
 }
 
 function toggleComplete(button) {
@@ -38,8 +39,12 @@ function toggleComplete(button) {
 
 function saveTaskToLocalStorage(title, desc, date) {
     let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    tasks.push({ title, desc, date });
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+
+    // Evitar duplicação verificando se a tarefa já existe
+    if (!tasks.some(task => task.title === title && task.date === date)) {
+        tasks.push({ title, desc, date });
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
 }
 
 function loadTasksFromLocalStorage() {
